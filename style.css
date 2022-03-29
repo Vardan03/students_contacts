@@ -1,0 +1,452 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+body
+{
+  background-color: #F5F5F5;
+  padding: 0px;
+  font-family: Open Sans;
+}
+
+header
+{
+  width: 100%;
+  height: 90px;
+  position: relative;
+  left: 0px;
+  top: 0px;
+  background-color: white;
+  box-shadow: 0px 9.03012px 27.0904px rgba(176, 190, 197, 0.32), 0px 3.38629px 5.64383px rgba(176, 190, 197, 0.32);
+}
+
+.icon
+{
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 1.46%;
+  right: 94.88%;
+  top: 22.22%;
+  bottom: 22.22%;
+  background-color: #9873FF;
+  border-radius: 100%;
+}
+
+.icon__text
+{
+  position: absolute;
+  left: 18%;
+  right: 95.17%;
+  top: 25%;
+  bottom: 35.56%;
+  font-size: 18px;
+  line-height: 25px;
+  font-style: normal;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.search
+{
+  position: absolute;
+  left: 10%;
+  right: 48.46%;
+  top: 25.56%;
+  bottom: 25.56%;
+  border: 1px solid rgba(126, 91, 91, 0.2);
+  box-sizing: border-box;
+  width: 581px;
+  height: 44px;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.search::placeholder
+{
+  position: relative;
+  left: 2%;
+  right: 81.99%;
+  color: #B0B0B0;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.wrapper
+{
+  max-width: 1186px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:40px ;
+}
+
+table
+{
+  width: 100%;
+
+}
+
+thead th:nth-child(1)
+{
+  color: #9873FF;
+}
+
+th{
+  font-size: 12px;
+  color: #B0B0B0;
+  padding-left: 15px;
+}
+
+tbody td{
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 19px;
+  color: #333333;
+}
+
+td
+{
+  padding-left: 15px;
+}
+
+tbody tr
+{
+  background-color: white;
+  height: 60px;
+  border-bottom: 1px solid rgba(200, 197, 209, .5);
+}
+
+tbody tr td:last-child
+{
+  width: 220px;
+}
+
+tbody tr td:nth-child(1)
+{
+  color: #B0B0B0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.addStudent
+{
+  position:relative;
+  left:40%;
+  margin-top: 40px;
+  text-align: center;
+  width: 216px;
+  height: 44px;
+  color: #9873FF;
+  border: 1px solid #9873FF;
+  box-sizing: border-box;
+  background-color: #F5F5F5
+}
+
+.vector_up
+{
+  cursor: pointer;
+  height: 15px;
+}
+
+.vector_down
+{
+  cursor: pointer;
+  height: 10px;
+  margin: 3px
+}
+
+.A-YA
+{
+  color: #9873FF;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.clock
+{
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  color: #B0B0B0;
+  margin-left: 7px;
+}
+
+.edit_icon
+{
+  margin-bottom: 2px;
+}
+
+.cancel_icon
+{
+  margin-left: 32px;
+  margin-right: 0px;
+}
+
+.button_text
+{
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  margin-left: 5px;
+}
+
+.tool {
+  position: relative;
+  display: inline-block;
+}
+
+.tool .tooltiptext {
+  visibility: hidden;
+  width: 133px;
+  height: 31px;
+  background-color: #333333;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltiptext
+{
+  font-size: 12px;
+}
+
+.tool .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333333 transparent transparent transparent;
+}
+
+.tool:hover .tooltiptext {
+  visibility: visible;
+}
+
+
+.modal_delete
+{
+  margin: auto;
+  position: fixed;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+}
+
+.modal
+{
+  margin: auto;
+  position: fixed;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+
+.modal_content
+{
+  position: relative;
+  margin: auto;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.15);
+  background: #FFFFFF;
+  padding-top: 24px;
+}
+
+.modal_content h2
+{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 25px;
+  display: inline-block;
+  margin-right: 9px;
+  margin-bottom:10px;
+  margin-left: 30px;
+}
+
+#span_id
+{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  color: #B0B0B0;
+  margin: 0px;
+  margin-right: 140px;
+}
+
+.modal_inputs
+{
+  margin-right: 30px;
+  margin-left: 30px;
+  margin-bottom: 25px;
+}
+
+.modal_inputs span
+{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 14px;
+  color: #B0B0B0;
+}
+
+.modal_inputs input
+{
+  width: 100%;
+  outline: 0;
+  border-width: 0 0 1px;
+  border-color: #C8C5D1;
+  color: black;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  margin-bottom: 10px;
+}
+
+.add_contact
+{
+  background-color:#C8C5D1;
+  text-align: center;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  padding-top: 7px;
+  height: 35px;
+  margin-bottom: 25px;
+}
+
+.add_contact:hover
+{
+  background-color: #e0dce9;
+}
+
+.modal_save
+{
+  width: 147px;
+  height: 44px;
+  background-color: #9873FF;
+  border: 0;
+  display: block;
+  margin: auto;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.delete_link
+{
+  display: block;
+  margin: auto;
+  background-color: white;
+  border: 0;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration: underline;
+  margin-bottom: 29px;
+}
+
+.cross_close
+{
+  cursor: pointer;
+  position: absolute;
+  margin-top: 20px;
+  margin-right: 20px;
+  top: 0;
+  right: 0;
+}
+
+#modal_close:hover
+{
+  width: 25px;
+}
+
+#add_contact
+{
+  cursor: pointer;
+}
+
+select
+{
+  width: 123px;
+  height: 37px;
+  margin: 0px;
+  background: #E7E5EB;
+  border: 1px solid #C8C5D1;
+  box-sizing: border-box;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.input_value
+{
+  border: 1px solid #C8C5D1;
+  box-sizing: border-box;
+  margin: 0px;
+  height: 37px;
+  width: 260px;
+  background-color: #f6f5f8 ;
+}
+
+.input_value::placeholder
+{
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+  color: #B0B0B0;
+}
+
+#add_contact:hover
+{
+  color: #9873FF;
+}
+
+.modal_wrap
+{
+  text-align: center;
+  margin-left: 88px;
+  margin-right: 88px;
+}
+
+.question_remove
+{
+  display: block;
+  margin-bottom: 25px;
+}
