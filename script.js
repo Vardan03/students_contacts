@@ -1,23 +1,98 @@
-let modal_div = `<div class="modal_content">
-<h2 class="modal_H2">Изменить данные</h2><span id="span_id">ID: 123458</span><img src="/images/Union.svg" id="modal_close" class="cross_close">
-<div class="modal_inputs">
-  <span>Фамилия*</span>
-  <br>
-  <input type="text" name="" id="input_surname">
-  <span>Имя*</span>
-  <input type="text" name="" id="input_name">
-  <span>Отчество</span>
-  <input type="text" name="" id="input_patronymic">
-</div>
-<div class="add_contact">
-  <div class="select_div"></div>
-  <span id="add_contact"><img src="/images/add_contact.svg" alt=""> Добавить контакт</span>
-</div>
-<button class="modal_save">Сохранить</button>
-<button class="delete_link">Удалить клиента</button>
-</div>`;
+function modalEdit() {
+  let div_modal = document.createElement('div');
+  div_modal.classList.add('modal_content');
+  let h2 = document.createElement('h2');
+  h2.classList.add('modal_H2');
+  h2.textContent = 'Изменить данные';
+  let span_id = document.createElement('span');
+  span_id.setAttribute('id', 'span_id');
+  let img = document.createElement('img');
+  img.setAttribute('src', '/images/Union.svg');
+  img.setAttribute('id', 'modal_close');
+  img.classList.add('cross_close');
+  let div_input = document.createElement('div');
+  div_input.classList.add('modal_inputs');
+  let span_surname = document.createElement('span');
+  span_surname.textContent = "Фамилия*";
+  let input_surname = document.createElement('input');
+  input_surname.setAttribute('id', 'input_surname');
+  let span_name = document.createElement('span');
+  span_name.textContent = 'Имя*';
+  let input_name = document.createElement('input');
+  input_name.setAttribute('id', 'input_name');
+  let span_patronymic = document.createElement('span');
+  span_patronymic.textContent = 'Отчество'
+  let input_patronymic = document.createElement('input');
+  input_patronymic.setAttribute('id', 'input_patronymic');
+  let div_addContant = document.createElement('div');
+  div_addContant.classList.add('add_contact');
+  let div_select = document.createElement('div');
+  div_select.classList.add('select_div');
+  let span_add = document.createElement('span');
+  span_add.textContent = 'Добавить контакт';
+  span_add.setAttribute('id', 'add_contact');
+  span_add.innerHTML = '<img src="/images/add_contact.svg" alt=""> Добавить контакт';
+  let button_save = document.createElement('button');
+  button_save.classList.add('modal_save');
+  button_save.textContent = 'Сохранить';
+  let button_delete = document.createElement('button');
+  button_delete.textContent = 'Удалить клиента';
+  button_delete.classList.add('delete_link');
 
+  div_input.append(span_surname, input_surname, span_name, input_name, span_patronymic, input_patronymic);
+  div_addContant.append(div_select, span_add);
+  div_modal.append(h2, span_id, img, div_input, div_addContant, button_save, button_delete);
 
+  return div_modal;
+}
+
+function modalDelete(id) {
+  let modal_content = document.createElement('div');
+  modal_content.classList.add('modal_content');
+  let img = document.createElement('img');
+  img.setAttribute('src', '/images/Union.svg');
+  img.classList.add('cross_close');
+  img.setAttribute('id', 'closeDelete_modal');
+  let h2 = document.createElement('h2');
+  h2.classList.add('modal_H2');
+  h2.textContent = 'Удалить клиента';
+  let div_wrap = document.createElement('div');
+  div_wrap.classList.add('modal_wrap');
+  let span_question = document.createElement('span');
+  span_question.classList.add('question_remove');
+  span_question.textContent = 'Вы действительно хотите удалить данного клиента?';
+  let button_save = document.createElement('button');
+  button_save.classList.add('modal_save');
+  button_save.textContent = 'Удалить';
+  let button_link = document.createElement('button');
+  button_link.classList.add('delete_link');
+  button_link.textContent = 'Отмена';
+
+  div_wrap.append(span_question, button_save, button_link);
+  modal_content.append(img, h2, div_wrap);
+
+  h2.style.marginRight = '152px';
+  h2.style.marginLeft = '133px';
+
+  button_link.addEventListener('click', () => {
+    modal.style.display = 'none';
+    modal.removeChild(document.querySelector('.modal_content'));
+  });
+
+  img.addEventListener('click', () => {
+    modal.style.display = 'none';
+    modal.removeChild(document.querySelector('.modal_content'));
+  });
+
+  button_save.onclick = async function () {
+    const response = await fetch(`http://localhost:3000/api/clients/${id}`, {
+      method: 'DELETE'
+    });
+
+  }
+
+  return modal_content;
+}
 
 let contact_icon = {
   phone: "phone",
@@ -128,7 +203,6 @@ async function createTableBody() {
     let edit = document.getElementById(`${item_student}_edit`);
     let remove = document.getElementById(`${item_student}_delete`);
     let modal = document.getElementById('modal');
-    let modalDelete = document.getElementById('modal_delete');
 
     edit.style.cursor = "pointer";
 
@@ -148,18 +222,52 @@ async function createTableBody() {
       remove.style.color = "#333"
     }
 
-    remove.addEventListener('click', () => {
-      modalDelete.style.display = "flex";
-    });
-
     let surname = student.surname;
     let name = student.name;
     let patronymic = student.lastName;
 
     edit.addEventListener('click', () => {
-      modal.innerHTML = modal_div;
-      let modal_h2 = document.querySelector('.modal_H2');
+      modal.append(modalEdit());
+      let modal_h2 = document.querySelector('.modal_H2');////////////////
       modal_h2.textContent = "Изменить данные";
+
+      let contact = student.contacts;
+      if (contact.length > 0) {
+
+        for (let i = 0; i < contact.length; i++) {
+          let select_div = document.querySelector('.select_div');
+          select_div.style.margin.bottom = '25px';
+
+          let select = document.createElement('select');
+          console.log(contact);
+
+          let option = document.createElement('option');
+          option.value = contact[i].type;
+          option.textContent = contact[i].type;
+          select.append(option);
+
+          let input_value = document.createElement('input');
+          input_value.setAttribute('type', 'text');
+          input_value.setAttribute('class', 'input_value');
+          input_value.setAttribute('placeholder', 'Введите данные контакта');
+          input_value.value = contact[i].value;
+
+          let addContact_div = document.querySelector('.add_contact');
+
+          addContact_div.style.padding = '25px 30px 25px 30px';
+          addContact_div.style.height = 'auto';
+          select_div.style.marginBottom = '25px';
+          select_div.append(select, input_value);
+        }
+      }
+
+      let delete_link = document.querySelector('.delete_link');
+      delete_link.addEventListener('click', () => {
+        modal.style.display = 'none';
+        modal.removeChild(document.querySelector('.modal_content'));
+        modal.append(modalDelete(student.id));
+        modal.style.display = 'flex';
+      });
 
       modal.style.display = "flex";
       let modal_surname = document.getElementById('input_surname');
@@ -205,12 +313,12 @@ async function createTableBody() {
         select_div.append(select, input_value);
       });
 
-      save_change.addEventListener('click', async function changes() {
+      save_change.addEventListener('click', async () => {
 
         let select = document.getElementsByTagName('select');
         let contact_value = document.querySelector('.input_value');
 
-        const response = await fetch(`http://localhost:3000/api/clients/${student.ID}`, {
+        const response = await fetch(`http://localhost:3000/api/clients/${student.id}`, {
           method: 'PATCH',
           body: JSON.stringify({
             name: modal_name.value,
@@ -242,33 +350,32 @@ async function createTableBody() {
         modal_id.textContent = ``;
 
         modal.style.display = "none";
+        modal.removeChild(document.querySelector('.modal_content'));
       });
     });
 
     remove.addEventListener('click', () => {
-      let modal_h2 = document.querySelector('.modal_H2');
-      modal_h2.style.marginRight = '152px';
-      modal_h2.style.marginLeft = '133px';
+      modal.append(modalDelete());
 
-      //let closeDelete_modal = document.getElementById();
 
       modal.style.display = "flex";//////////////////////////////////////////////////////
     })
 
     window.onclick = function (event) {
       if (event.target == modal) {
-        let modal_surname = document.getElementById('input_surname');
-        let modal_name = document.getElementById('input_name');
-        let modal_patronymic = document.getElementById('input_patronymic');
-        let modal_id = document.getElementById('span_id');
+        if (document.querySelector('.modal_H2').textContent == 'Изменить данные' || document.querySelector('.modal_H2').textContent == 'Новый клиент') {
+          let modal_surname = document.getElementById('input_surname');
+          let modal_name = document.getElementById('input_name');
+          let modal_patronymic = document.getElementById('input_patronymic');
+          let modal_id = document.getElementById('span_id');
 
-
-        modal_name.value = "";
-        modal_surname.value = "";
-        modal_patronymic.value = "";
-        modal_id.textContent = ``;
-
+          modal_name.value = "";
+          modal_surname.value = "";
+          modal_patronymic.value = "";
+          modal_id.textContent = ``;
+        }
         modal.style.display = "none";
+        modal.removeChild(document.querySelector('.modal_content'))
       }
     }
   }
@@ -278,8 +385,34 @@ async function createTableBody() {
   let addStudent = document.querySelector('.addStudent');
 
   addStudent.addEventListener('click', () => {
+    let modal = document.getElementById('modal');
+    modal.append(modalEdit());
+
+    let delete_link = document.querySelector('.delete_link');
+    delete_link.textContent = 'Отмена';
+    delete_link.addEventListener('click', () => {
+      modal.style.display = "none";
+      modal.removeChild(document.querySelector('.modal_content'));
+    });
+
+    let close = document.getElementById('modal_close');
+    close.addEventListener('click', () => {
+      let modal_surname = document.getElementById('input_surname');
+      let modal_name = document.getElementById('input_name');
+      let modal_patronymic = document.getElementById('input_patronymic');
+      let modal_id = document.getElementById('span_id');
+
+      modal_name.value = "";
+      modal_surname.value = "";
+      modal_patronymic.value = "";
+      modal_id.textContent = ``;
+
+      modal.style.display = "none";
+      modal.removeChild(document.querySelector('.modal_content'));
+    })
+
     let modal_h2 = document.querySelector('.modal_H2');
-    modal_h2.textContent = "Новый клиент"
+    modal_h2.textContent = "Новый клиент";
 
     let add_contact = document.getElementById('add_contact');
     let addContact_div = document.querySelector('.add_contact');
@@ -335,7 +468,6 @@ async function createTableBody() {
       let result = await response.json();
       console.log(result);
 
-
       let obj = {
         ID: result.id,
         Name: result.surname + " " + result.name + " " + result.lastName,
@@ -346,7 +478,6 @@ async function createTableBody() {
       students.push(obj);
       console.log(students);
       createTableBody();
-
     });
 
     modal.style.display = 'flex';
