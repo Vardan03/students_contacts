@@ -94,12 +94,28 @@ function modalDelete(id) {
   return modal_content;
 }
 
+let delayTimer;
+function Filter() {
+  clearTimeout(delayTimer)
+  delayTimer = setTimeout(async () => {
+    let input = document.querySelector('.search');
+    const response = await fetch(`http://localhost:3000/api/clients?search=${input.value}`, {
+      method: 'GET'
+    });
+
+    const result = await response.json();
+    createTableBody(result);
+  }, 300)
+
+}
+
+
 let contact_icon = {
   phone: "phone",
   vk: "vk",
   Twitter: "Subtract",
   mail: "mail",
-  instagram: "Subtract",
+  Facebook: "fb",
   mail2: "mail2"
 
 };
@@ -123,14 +139,16 @@ function getHours(str = "") {
   return Hours
 }
 
-//students.sort(byField('ID'));
-async function createTableBody() {
-
+async function getStudents() {
   const response = await fetch('http://localhost:3000/api/clients', {
     method: 'GET'
   });
 
-  const students = await response.json();
+  const result = await response.json();
+  return result;
+}
+
+function createTableBody(students) {
 
   let tbody = document.getElementById("tbody");
 
@@ -239,7 +257,7 @@ async function createTableBody() {
           select_div.style.margin.bottom = '25px';
 
           let select = document.createElement('select');
-          console.log(contact);
+
 
           let option = document.createElement('option');
           option.value = contact[i].type;
@@ -294,7 +312,7 @@ async function createTableBody() {
         let select = document.createElement('select');
         let types_arr = ['Телефон', 'VK', 'Twitter', 'Email', 'Facebook'];
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < types_arr.length; i++) {
           let option = document.createElement('option');
           option.value = Object.keys(contact_icon)[i];
           option.textContent = types_arr[i];
@@ -314,9 +332,16 @@ async function createTableBody() {
       });
 
       save_change.addEventListener('click', async () => {
+        let select_div = document.querySelector('.select_div');
+        let student_contacts = [];
 
-        let select = document.getElementsByTagName('select');
-        let contact_value = document.querySelector('.input_value');
+        let k = select_div.childElementCount;
+        for (let i = 0; i < k; i = i + 2) {
+          let obj = {};
+          obj.type = select_div.childNodes[i].value;
+          obj.value = select_div.childNodes[i + 1].value;
+          student_contacts.push(obj);
+        }
 
         const response = await fetch(`http://localhost:3000/api/clients/${student.id}`, {
           method: 'PATCH',
@@ -324,15 +349,9 @@ async function createTableBody() {
             name: modal_name.value,
             surname: modal_surname.value,
             lastName: modal_patronymic.value,
-            contacts: [{
-              type: select.value,
-              value: contact_value.value
-            }]
+            contacts: student_contacts
           })
         });
-
-        const x = await response.json();
-        console.log(x);
       });
 
       let modal_close = document.getElementById('modal_close');
@@ -355,10 +374,10 @@ async function createTableBody() {
     });
 
     remove.addEventListener('click', () => {
-      modal.append(modalDelete());
+      modal.append(modalDelete(student.id));
 
 
-      modal.style.display = "flex";//////////////////////////////////////////////////////
+      modal.style.display = "flex";
     })
 
     window.onclick = function (event) {
@@ -446,11 +465,23 @@ async function createTableBody() {
     let create_button = document.querySelector('.modal_save');
     create_button.addEventListener('click', async () => {
 
-      let select = document.getElementsByTagName('select');
-      let contact_value = document.querySelector('.input_value');
+      let select_div = document.querySelector('.select_div');
       let modal_surname = document.getElementById('input_surname');
       let modal_name = document.getElementById('input_name');
       let modal_patronymic = document.getElementById('input_patronymic');
+
+
+      let student_contacts = [
+
+      ];
+
+      let k = select_div.childElementCount;
+      for (let i = 0; i < k; i = i + 2) {
+        let obj = {};
+        obj.type = select_div.childNodes[i].value;
+        obj.value = select_div.childNodes[i + 1].value;
+        student_contacts.push(obj);
+      }
 
       const response = await fetch('http://localhost:3000/api/clients', {
         method: 'POST',
@@ -458,10 +489,7 @@ async function createTableBody() {
           name: modal_name.value,
           surname: modal_surname.value,
           lastName: modal_patronymic.value,
-          contacts: [{
-            type: select[0].value,
-            value: contact_value.value
-          }]
+          contacts: student_contacts
         })
       });
 
@@ -478,87 +506,27 @@ async function createTableBody() {
       students.push(obj);
       console.log(students);
       createTableBody();
+
     });
 
     modal.style.display = 'flex';
   });
 }
 
+function sortColumn(columnName)
+{
 
-/*
-let IDvector = document.getElementById("ID_vector");
-let Name_vector = document.getElementById("Name_vector");
-let dateStart_vector = document.getElementById('date_vector');
-let dateLast_vector = document.getElementById('lastDate_vector');
+}
 
-IDvector.addEventListener('click', () => {
-  let src = IDvector.getAttribute('src');
-  if (src == '/images/vector_down.svg') {
-    students.sort(byFieldСonversely('ID'));
-    IDvector.setAttribute('src', '/images/vector_up.svg');
-    IDvector.setAttribute('class', 'vector_up');
-    createTableBody();
-  }
-  else if (src == '/images/vector_up.svg') {
-    students.sort(byField('ID'));
-    IDvector.setAttribute('src', '/images/vector_down.svg');
-    IDvector.setAttribute('class', 'vector_down');
-    createTableBody();
-  }
-});
-Name_vector.addEventListener('click', () => {
-  let src = Name_vector.getAttribute('src');
-  if (src == '/images/vector_down.svg') {
-    students.sort(byFieldСonversely('Name'));
-    Name_vector.setAttribute('src', '/images/vector_up.svg');
-    Name_vector.setAttribute('class', 'vector_up');
-    createTableBody();
-  }
-  else if (src == '/images/vector_up.svg') {
-    students.sort(byField('Name'));
-    Name_vector.setAttribute('src', '/images/vector_down.svg');
-    Name_vector.setAttribute('class', 'vector_down');
-    createTableBody();
-  }
-});
-dateStart_vector.addEventListener('click', () => {
-  let src = dateStart_vector.getAttribute('src');
-  if (src == '/images/vector_down.svg') {
-    students.sort(byFieldСonversely('dateCreate'));
-    dateStart_vector.setAttribute('src', '/images/vector_up.svg');
-    dateStart_vector.setAttribute('class', 'vector_up');
-    createTableBody();
-  }
-  else if (src == '/images/vector_up.svg') {
-    students.sort(byField('dateCreate'));
-    dateStart_vector.setAttribute('src', '/images/vector_down.svg');
-    dateStart_vector.setAttribute('class', 'vector_down');
-    createTableBody();
-  }
-});
-dateLast_vector.addEventListener('click', () => {
-  let src = dateLast_vector.getAttribute('src');
-  if (src == '/images/vector_down.svg') {
-    students.sort(byFieldСonversely('dateLastChange'));
-    dateLast_vector.setAttribute('src', '/images/vector_up.svg');
-    dateLast_vector.setAttribute('class', 'vector_up');
-    createTableBody();
-  }
-  else if (src == '/images/vector_up.svg') {
-    students.sort(byField('dateLastChange'));
-    dateLast_vector.setAttribute('src', '/images/vector_down.svg');
-    dateLast_vector.setAttribute('class', 'vector_down');
-    createTableBody();
-  }
-});
-*/
-document.addEventListener('DOMContentLoaded', () => {
-  createTableBody();
+document.addEventListener('DOMContentLoaded', async () => {
+  let  students = await getStudents();
+  createTableBody(students);
+  console.log(students);
 
-  /*let vectors = document.querySelectorAll('.vector_down');
+  let vectors = document.querySelectorAll('.vector_down');
   vectors.forEach(vector => vector.addEventListener('click', () => {
 
-  }));*/
+  }));
 
 });
 
