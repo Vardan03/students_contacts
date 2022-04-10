@@ -272,10 +272,13 @@ function createTableBody(students) {
 
           let addContact_div = document.querySelector('.add_contact');
 
+          let cancel_contact = document.createElement('div');
+          cancel_contact.classList.add('cancel_contact');
+
           addContact_div.style.padding = '25px 30px 25px 30px';
           addContact_div.style.height = 'auto';
           select_div.style.marginBottom = '25px';
-          select_div.append(select, input_value);
+          select_div.append(select, input_value,cancel_contact);
         }
       }
 
@@ -407,6 +410,9 @@ function createTableBody(students) {
     let modal = document.getElementById('modal');
     modal.append(modalEdit());
 
+    let modal_save = document.querySelector('.modal_save');
+    modal_save.textContent = 'Добавить';
+
     let delete_link = document.querySelector('.delete_link');
     delete_link.textContent = 'Отмена';
     delete_link.addEventListener('click', () => {
@@ -513,19 +519,29 @@ function createTableBody(students) {
   });
 }
 
-function sortColumn(columnName)
-{
-
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   let  students = await getStudents();
   createTableBody(students);
-  console.log(students);
 
-  let vectors = document.querySelectorAll('.vector_down');
+  let fl = true;
+
+  let vectors = document.querySelectorAll('.vector');
   vectors.forEach(vector => vector.addEventListener('click', () => {
-
+    console.log(vector.id);
+    if(fl)
+    {
+      vector.setAttribute('src','/images/vector_up.svg');
+      vector.setAttribute('class','vector_up vector');
+      students = students.sort(byFieldСonversely(vector.id));
+      fl = !fl;
+    }
+    else{
+      vector.setAttribute('src','/images/vector_down.svg');
+      vector.setAttribute('class','vector_down vector');
+      students = students.sort(byField(vector.id));
+      fl = !fl;
+    }
+    createTableBody(students);
   }));
 
 });

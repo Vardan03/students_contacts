@@ -450,3 +450,11 @@ select
   display: block;
   margin-bottom: 25px;
 }
+
+.cancel_contact
+{
+  width: 27px;
+  height: 37px;
+  border: 1px solid;
+  display: inline-block;
+}
