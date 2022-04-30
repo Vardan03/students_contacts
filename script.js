@@ -183,11 +183,10 @@ function createTableBody(students) {
 
       ];
 
-      let k = select_div.childElementCount;
-      for (let i = 0; i < k; i = i + 2) {
+      for (const div of select_div.childNodes) {
         let obj = {};
-        obj.type = select_div.childNodes[i].value;
-        obj.value = select_div.childNodes[i + 1].value;
+        obj.type = div.firstChild.value;
+        obj.value = div.childNodes[1].value;
         student_contacts.push(obj);
       }
 

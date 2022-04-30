@@ -1,7 +1,7 @@
-import { modalEdit } from './create-modal.js';
-import { closeModal,addContact } from './helpers.js';
+import { modalEdit, modalDelete } from './create-modal.js';
+import { closeModal, addContact, } from './helpers.js';
 
-export function appendEdit(student,value_contact) {
+export function appendEdit(student) {
   let surname = student.surname;
   let name = student.name;
   let patronymic = student.lastName;
@@ -13,28 +13,7 @@ export function appendEdit(student,value_contact) {
   if (contact.length > 0) {
 
     for (let i = 0; i < contact.length; i++) {
-      let select_div = document.querySelector('.select_div');
-      select_div.style.marginBottom = '25px';
-
-      let select = document.createElement('select');
-
-      let option = document.createElement('option');
-      option.value = contact[i].type;
-      option.textContent = contact[i].type;
-      select.append(option);
-
-      let input_value = document.createElement('input');
-      input_value.setAttribute('type', 'text');
-      input_value.setAttribute('class', 'input_value');
-      input_value.setAttribute('placeholder', 'Введите данные контакта');
-      input_value.value = contact[i].value;
-
-      let addContact_div = document.querySelector('.add_contact');
-
-      addContact_div.style.padding = '25px 30px 25px 30px';
-      addContact_div.style.height = 'auto';
-      select_div.style.marginBottom = '25px';
-      select_div.append(select, input_value);
+      addContact(contact[i].type, contact[i].value);
     }
   }
 
@@ -45,8 +24,6 @@ export function appendEdit(student,value_contact) {
     modal.append(modalDelete(student.id));
     modal.style.display = 'flex';
   });
-
-  modal.style.display = "flex";
   let modal_surname = document.getElementById('input_surname');
   let modal_name = document.getElementById('input_name');
   let modal_patronymic = document.getElementById('input_patronymic');
@@ -59,23 +36,34 @@ export function appendEdit(student,value_contact) {
   modal_id.textContent = `ID: ${student.id}`;
 
   let save_change = document.querySelector('.modal_save');
-
+  let select_div = document.querySelector('.select_div');
   let add_contact = document.getElementById('add_contact');
-  add_contact.addEventListener('click',addContact );
+  add_contact.addEventListener('click', () => {
+    if (select_div.childNodes.length == 10) {
+      alert('Нельзя больше десяти контактов');
+      return;
+    }
+    addContact();
+  });
 
   save_change.addEventListener('click', async () => {
+    let modal_errors = document.querySelector('.errors_div');
+    modal_errors.innerHTML = '';
+    modal_errors.style.marginBottom = '0px'
+
     let select_div = document.querySelector('.select_div');
     let student_contacts = [];
 
-    let k = select_div.childElementCount;
-    for (let i = 0; i < k; i = i + 2) {
+    for (const div of select_div.childNodes) {
       let obj = {};
-      obj.type = select_div.childNodes[i].value;
-      obj.value = select_div.childNodes[i + 1].value;
+      obj.type = div.firstChild.value;
+      obj.value = div.childNodes[1].value;
       student_contacts.push(obj);
     }
 
-    await fetch(`http://localhost:3000/api/clients/${student.id}`, {
+    console.log(student_contacts);
+
+    const response = await fetch(`http://localhost:3000/api/clients/${student.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         name: modal_name.value,
@@ -84,8 +72,28 @@ export function appendEdit(student,value_contact) {
         contacts: student_contacts
       })
     });
+
+    const result = await response.json();
+    try {
+      if (result.errors) {
+        modal_errors.style.marginBottom = '9px';
+        for (let i = 0; i < result.errors.length; i++) {
+          let span = document.createElement('span');
+          span.classList.add('Errors');
+          span.textContent = "Ошибка:" + result.errors[i].message
+          modal_errors.append(span);
+        }
+      }
+    }
+    catch (error) {
+      let span = document.createElement('span');
+      span.classList.add('Errors');
+      span.textContent = "Что-то пошло не так...";
+      modal_errors.append(span);
+    }
   });
 
   let modal_close = document.getElementById('modal_close');
   modal_close.addEventListener('click', closeModal);
+  modal.style.display = "flex";
 }

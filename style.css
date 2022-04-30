@@ -370,8 +370,9 @@ select {
   font-family: Open Sans;
   font-style: normal;
   font-weight: normal;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
+  padding-left: 12px;
 }
 
 .input_value {
@@ -379,7 +380,7 @@ select {
   box-sizing: border-box;
   margin: 0px;
   height: 37px;
-  width: 267px;
+  width: 235px;
   background-color: #f6f5f8;
 }
 
@@ -409,11 +410,12 @@ select {
   margin-bottom: 25px;
 }
 
-.cancel_contact {
+.delete_contact {
   width: 27px;
   height: 37px;
   border: 1px solid;
-  display: inline-block;
+  background-color: #E7E5EB;
+  border: 1px solid #C8C5D1;
 }
 
 .Errors {
@@ -430,4 +432,7 @@ select {
 .errors_div {
   width: 100%;
   text-align: center;
+}
+.hover_svg :hover {
+  fill: #DA4567;
 }
