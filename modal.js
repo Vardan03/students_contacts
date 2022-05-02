@@ -97,3 +97,84 @@ export function appendEdit(student) {
   modal_close.addEventListener('click', closeModal);
   modal.style.display = "flex";
 }
+
+export function appendAdd() {
+  let modal = document.getElementById('modal');
+  modal.append(modalEdit());
+
+  let modal_save = document.querySelector('.modal_save');
+  modal_save.textContent = 'Добавить';
+
+  let delete_link = document.querySelector('.delete_link');
+  delete_link.textContent = 'Отмена';
+  delete_link.addEventListener('click', () => {
+    modal.style.display = "none";
+    modal.removeChild(document.querySelector('.modal_content'));
+  });
+
+  let close = document.getElementById('modal_close');
+  close.addEventListener('click', () => {
+    closeModal();
+  })
+
+  let modal_h2 = document.querySelector('.modal_H2');
+  modal_h2.textContent = "Новый клиент";
+
+  let add_contact = document.getElementById('add_contact');
+  add_contact.addEventListener('click', addContact);
+
+  let add_button = document.querySelector('.modal_save');
+  add_button.addEventListener('click', async () => {
+
+    let modal_errors = document.querySelector('.errors_div');
+    modal_errors.innerHTML = '';
+    modal_errors.style.marginBottom = '0px'
+
+    let select_div = document.querySelector('.select_div');
+    let modal_surname = document.getElementById('input_surname');
+    let modal_name = document.getElementById('input_name');
+    let modal_patronymic = document.getElementById('input_patronymic');
+
+    let student_contacts = [
+
+    ];
+
+    for (const div of select_div.childNodes) {
+      let obj = {};
+      obj.type = div.firstChild.value;
+      obj.value = div.childNodes[1].value;
+      student_contacts.push(obj);
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/clients', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: modal_name.value,
+          surname: modal_surname.value,
+          lastName: modal_patronymic.value,
+          contacts: student_contacts
+        })
+      });
+      const result = await response.json();
+
+      if (result.errors) {
+        modal_errors.style.marginBottom = '9px';
+        for (let i = 0; i < result.errors.length; i++) {
+          let span = document.createElement('span');
+          span.classList.add('Errors');
+          span.textContent = "Ошибка:" + result.errors[i].message
+          modal_errors.append(span);
+        }
+      }
+    }
+    catch (error) {
+      let span = document.createElement('span');
+      span.classList.add('Errors');
+      span.textContent = "Что-то пошло не так...";
+      modal_errors.append(span);
+    }
+  });
+
+  modal.style.display = 'flex';
+}
